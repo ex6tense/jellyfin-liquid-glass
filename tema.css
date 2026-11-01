@@ -1,0 +1,195 @@
+/* Liquid Glass para Jellyfin · github.com/ex6tense/jellyfin-liquid-glass
+   Uso: en Jellyfin → Panel de control → General → CSS personalizado:
+   @import url('https://cdn.jsdelivr.net/gh/ex6tense/jellyfin-liquid-glass@main/tema.css'); */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+/* ---------- variables ---------- */
+:root {
+  --lg-radio: 16px;
+  --lg-radio-panel: 24px;
+  --lg-cristal: linear-gradient(135deg, rgba(255, 255, 255, .16), rgba(255, 255, 255, .04));
+  --lg-tinte: rgba(22, 22, 26, .38);
+  --lg-borde: rgba(255, 255, 255, .18);
+  --lg-brillo: inset 0 1px 0 rgba(255, 255, 255, .35), inset 0 -1px 0 rgba(255, 255, 255, .06);
+  --lg-sombra: 0 12px 40px rgba(0, 0, 0, .45);
+  --lg-desenfoque: blur(28px) saturate(180%);
+  --lg-texto-2: rgba(255, 255, 255, .55);
+}
+
+/* ---------- fondo y tipografía ---------- */
+/* resplandores de color: el cristal necesita algo detrás que difuminar.
+   Durante la reproducción Jellyfin pone .transparentDocument: ahí el vídeo va detrás de la página y no hay que taparlo */
+html:not(.transparentDocument), html:not(.transparentDocument) body,
+html:not(.transparentDocument) .skinBody, html:not(.transparentDocument) .backgroundContainer:not(.withBackdrop) {
+  background:
+    radial-gradient(60vw 50vh at 12% 0%, rgba(120, 80, 255, .22), transparent 70%),
+    radial-gradient(50vw 50vh at 92% 100%, rgba(40, 140, 255, .16), transparent 70%),
+    #050507 !important;
+  background-attachment: fixed !important;
+}
+body, h1, h2, h3, button, input, select, textarea, .sectionTitle, .cardText {
+  font-family: "Inter", -apple-system, "SF Pro Display", system-ui, sans-serif !important;
+}
+.sectionTitle { font-weight: 700 !important; letter-spacing: -.01em; }
+
+/* ---------- superficies de cristal reutilizadas ---------- */
+/* Jellyfin 12 dibuja la barra, el menú lateral y los menús con componentes MUI; .skinHeader/.mainDrawer son los de la interfaz clásica */
+.skinHeader, header.MuiAppBar-root,
+.mainDrawer, .MuiDrawer-paper,
+.MuiMenu-paper, .MuiPopover-paper,
+.dialog, .actionSheet,
+.toast,
+.videoOsdBottom .osdControls,
+#loginPage .manualLoginForm, #loginPage .visualLoginForm {
+  background: var(--lg-cristal), var(--lg-tinte) !important;
+  -webkit-backdrop-filter: var(--lg-desenfoque);
+  backdrop-filter: var(--lg-desenfoque);
+  border: 1px solid var(--lg-borde) !important;
+  box-shadow: var(--lg-brillo), var(--lg-sombra) !important;
+}
+
+/* ---------- barra superior: cápsula flotante ---------- */
+.skinHeader, header.MuiAppBar-root {
+  top: 10px !important;
+  left: 16px !important;
+  right: 16px !important;
+  width: auto !important;
+  border-radius: 22px;
+}
+/* en el reproductor la barra se pliega: sin cristal ni borde, o queda una línea suelta sobre el vídeo */
+.transparentDocument .skinHeader, .transparentDocument header.MuiAppBar-root {
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+/* la barra baja 10 px al flotar: las páginas bajan lo mismo para que no pise los títulos */
+.mainAnimatedPage.libraryPage, .mainAnimatedPage.itemDetailPage { margin-top: 20px; }
+/* pestañas de las bibliotecas (Películas, Sugerencias…): la activa es una píldora de cristal */
+.emby-tab-button { border-radius: 999px; }
+.emby-tab-button-active {
+  background: rgba(255, 255, 255, .14) !important;
+  box-shadow: var(--lg-brillo);
+  color: #fff !important;
+}
+.headerTabs .emby-tabs-slider { border-bottom: 0 !important; }
+
+/* ---------- menú lateral ---------- */
+.mainDrawer, .MuiDrawer-paper { border-radius: 0 var(--lg-radio-panel) var(--lg-radio-panel) 0; border-left: 0 !important; }
+.MuiMenu-paper, .MuiPopover-paper { border-radius: 18px !important; overflow: hidden; color: #fff !important; }
+.MuiMenu-paper .MuiList-root, .MuiPopover-paper .MuiList-root { background: transparent !important; }
+.MuiMenuItem-root, .MuiListItemButton-root { border-radius: 12px; margin: 2px 6px; }
+.MuiListItemButton-root.Mui-selected { background: rgba(255, 255, 255, .14) !important; }
+.navMenuOption { border-radius: 12px; margin: 2px 8px; }
+.navMenuOption-selected { background: rgba(255, 255, 255, .14) !important; }
+
+/* ---------- tarjetas ---------- */
+.cardBox { transition: transform .3s cubic-bezier(.2, .8, .2, 1); }
+.cardScalable, .cardImageContainer, .cardContent { border-radius: var(--lg-radio) !important; }
+.cardScalable { box-shadow: 0 10px 30px rgba(0, 0, 0, .5); transition: box-shadow .3s; }
+/* reflejo de luz en el borde superior; encima de la imagen pero sin bloquear los clics */
+.cardScalable::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .14), inset 0 1px 0 rgba(255, 255, 255, .4);
+  background: linear-gradient(160deg, rgba(255, 255, 255, .18) 0%, rgba(255, 255, 255, 0) 32%);
+}
+.card:hover .cardBox, .card:focus .cardBox { transform: scale(1.05); }
+.card:hover .cardScalable, .card:focus .cardScalable { box-shadow: 0 22px 50px rgba(0, 0, 0, .65); }
+.card:focus { outline: none; }
+.card:focus .cardScalable { outline: 3px solid rgba(255, 255, 255, .9); }
+.cardText { color: rgba(255, 255, 255, .9); }
+.cardText-secondary { color: var(--lg-texto-2) !important; }
+/* tarjetas sin imagen (Playlists, carpetas): cristal en vez de color plano */
+.cardImageContainer[class*="defaultCardBackground"] { background: var(--lg-cristal), rgba(255, 255, 255, .04) !important; }
+/* insignias (vistos, número de episodios) como píldoras de cristal */
+.countIndicator, .playedIndicator, .indicator {
+  background: rgba(255, 255, 255, .22) !important;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--lg-borde);
+}
+
+/* ---------- barra de progreso ---------- */
+.itemProgressBar { height: 4px !important; background: rgba(255, 255, 255, .25) !important; border-radius: 4px; }
+.itemProgressBarForeground { background: #fff !important; border-radius: 4px; }
+
+/* ---------- botones ---------- */
+.emby-button.raised, .button-submit, .detailButton, .emby-scrollbuttons-button {
+  border-radius: 999px !important;
+  background: var(--lg-cristal), rgba(255, 255, 255, .05) !important;
+  -webkit-backdrop-filter: var(--lg-desenfoque);
+  backdrop-filter: var(--lg-desenfoque);
+  border: 1px solid var(--lg-borde) !important;
+  box-shadow: var(--lg-brillo);
+  color: #fff !important;
+}
+.button-submit { background: var(--lg-cristal), rgba(255, 255, 255, .22) !important; }
+.emby-button.raised:hover, .detailButton:hover, .emby-scrollbuttons-button:hover {
+  background: var(--lg-cristal), rgba(255, 255, 255, .16) !important;
+}
+
+/* ---------- campos de texto y desplegables ---------- */
+.emby-input, .emby-select-withcolor, .emby-textarea {
+  border-radius: 12px !important;
+  background: rgba(255, 255, 255, .07) !important;
+  border: 1px solid var(--lg-borde) !important;
+}
+
+/* ---------- ficha de película o serie ---------- */
+/* el fondo grande se funde con el resto en vez de cortar en seco */
+.itemBackdrop { -webkit-mask-image: linear-gradient(#000 55%, transparent); mask-image: linear-gradient(#000 55%, transparent); }
+.detailPagePrimaryContainer, .detailRibbon, .detailPageWrapperContainer { background: transparent !important; }
+/* la imagen de fondo de la película se ve difuminada detrás de la ficha, como en Apple TV */
+.backgroundContainer.withBackdrop {
+  background: rgba(5, 5, 7, .62) !important;
+  -webkit-backdrop-filter: blur(40px) saturate(160%);
+  backdrop-filter: blur(40px) saturate(160%);
+}
+.detailImageContainer .cardScalable { box-shadow: 0 20px 50px rgba(0, 0, 0, .6); }
+
+/* ---------- menús, ventanas y avisos ---------- */
+.dialog, .actionSheet { border-radius: var(--lg-radio-panel) !important; }
+.formDialogHeader, .formDialogFooter { background: transparent !important; }
+.actionSheetMenuItem { border-radius: 12px; }
+.toast { border-radius: 999px !important; color: #fff !important; }
+
+/* ---------- reproductor: controles en una cápsula flotante ---------- */
+/* .videoOsdBottom deja ~110 px arriba para su degradado; el cristal va solo en .osdControls (tiempo y botones) */
+.videoOsdBottom { background: transparent !important; }
+.videoOsdBottom .osdControls { margin: 0 16px; padding: 8px 16px 4px !important; border-radius: var(--lg-radio-panel); }
+/* deslizadores blancos como en Apple TV, en vez del azul de Jellyfin */
+.mdl-slider-background-flex { background: rgba(255, 255, 255, .22) !important; }
+.mdl-slider-background-upper { background: rgba(255, 255, 255, .4) !important; }
+.mdl-slider-background-lower { background: #fff !important; }
+.mdl-slider::-webkit-slider-thumb { background: #fff !important; }
+.mdl-slider::-moz-range-thumb { background: #fff !important; }
+
+/* ---------- login ---------- */
+#loginPage .manualLoginForm, #loginPage .visualLoginForm { border-radius: var(--lg-radio-panel); padding: 1.5em; }
+
+/* ---------- móvil ---------- */
+@media (max-width: 600px) {
+  .skinHeader, header.MuiAppBar-root { left: 8px !important; right: 8px !important; top: 6px !important; border-radius: 18px; }
+  .videoOsdBottom .osdControls { margin: 0 8px; }
+}
+
+/* ---------- accesibilidad ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .cardBox, .cardScalable { transition: none; }
+  .card:hover .cardBox, .card:focus .cardBox { transform: none; }
+}
+/* quien pida menos transparencia en el sistema ve paneles sólidos */
+@media (prefers-reduced-transparency: reduce) {
+  .skinHeader, header.MuiAppBar-root, .mainDrawer, .MuiDrawer-paper, .MuiMenu-paper, .MuiPopover-paper,
+  .dialog, .actionSheet, .toast, .videoOsdBottom .osdControls,
+  .emby-button.raised, .button-submit, .detailButton, .emby-scrollbuttons-button {
+    background: #1c1c20 !important;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
