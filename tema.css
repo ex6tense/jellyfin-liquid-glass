@@ -39,7 +39,7 @@ body, h1, h2, h3, button, input, select, textarea, .sectionTitle, .cardText {
 
 /* ---------- superficies de cristal reutilizadas ---------- */
 /* Jellyfin 12 dibuja la barra, el menú lateral y los menús con componentes MUI; .skinHeader/.mainDrawer son los de la interfaz clásica */
-.skinHeader, header.MuiAppBar-root,
+.skinHeader,
 .mainDrawer, .MuiDrawer-paper,
 .MuiMenu-paper, .MuiPopover-paper,
 .dialog, .actionSheet,
@@ -59,7 +59,8 @@ body, h1, h2, h3, button, input, select, textarea, .sectionTitle, .cardText {
 }
 
 /* filo de luz en la navegación y los controles (el contenido queda limpio, sin cristal encima) */
-.skinHeader::before, header.MuiAppBar-root::before, .videoOsdBottom .osdControls::before,
+.skinHeader::before, .videoOsdBottom .osdControls::before,
+header.MuiAppBar-root .MuiButton-root::before, header.MuiAppBar-root .MuiIconButton-root::before,
 .detailButton::before, .emby-scrollbuttons-button::before, .emby-button.raised::before, .button-submit::before,
 .videoOsd-appBar .MuiIconButton-root::before, .videoOsd-appBar > .MuiTypography-root::before,
 .cardOverlayFab-primary::before, .cardOverlayButton-br .cardOverlayButton::before {
@@ -74,19 +75,37 @@ body, h1, h2, h3, button, input, select, textarea, .sectionTitle, .cardText {
   mask-composite: exclude;
   pointer-events: none;
 }
-.skinHeader, header.MuiAppBar-root, .videoOsdBottom .osdControls,
+.skinHeader, .videoOsdBottom .osdControls,
 .detailButton, .emby-scrollbuttons-button, .emby-button.raised, .button-submit { border-color: transparent !important; }
 .videoOsdBottom .osdControls { position: relative; }
 
-/* ---------- barra superior: cápsula flotante ---------- */
+/* ---------- barra superior: flota, y cada enlace e icono es su propia píldora ---------- */
 .skinHeader, header.MuiAppBar-root {
   top: 10px !important;
   left: 16px !important;
   right: 16px !important;
   width: auto !important;
   border-radius: 22px;
-  /* el cristal de la barra es claro: con una portada muy blanca debajo, la sombra mantiene el texto legible */
+  /* el cristal es claro: con una portada muy blanca debajo, la sombra mantiene el texto legible */
   text-shadow: 0 1px 2px rgba(0, 0, 0, .45);
+}
+/* la barra de Jellyfin 12 no lleva fondo: el cristal va en cada píldora */
+header.MuiAppBar-root { background: transparent !important; box-shadow: none !important; border: 0 !important; }
+header.MuiAppBar-root .MuiToolbar-root > .MuiStack-root,
+header.MuiAppBar-root .MuiToolbar-root > .MuiBox-root { display: flex; align-items: center; gap: 8px; }
+header.MuiAppBar-root .MuiToolbar-root > .MuiBox-root:last-child { margin-left: 8px; }
+header.MuiAppBar-root .MuiButton-root, header.MuiAppBar-root .MuiIconButton-root {
+  background: var(--lg-cristal), var(--lg-tinte) !important;
+  -webkit-backdrop-filter: var(--lg-desenfoque);
+  backdrop-filter: var(--lg-desenfoque);
+  box-shadow: var(--lg-brillo), 0 8px 24px rgba(0, 0, 0, .35);
+  color: #fff !important;
+}
+header.MuiAppBar-root .MuiButton-root { border-radius: 999px !important; padding: 6px 16px !important; text-transform: none; }
+header.MuiAppBar-root .MuiIconButton-root { border-radius: 50% !important; width: 44px; height: 44px; }
+header.MuiAppBar-root .MuiButton-root:hover, header.MuiAppBar-root .MuiIconButton-root:hover,
+header.MuiAppBar-root .MuiButton-root[aria-current="page"] {
+  background: var(--lg-cristal), rgba(255, 255, 255, .18) !important;
 }
 /* en el reproductor la barra se pliega: sin cristal ni borde, o queda una línea suelta sobre el vídeo */
 .transparentDocument .skinHeader, .transparentDocument header.MuiAppBar-root {
@@ -269,7 +288,8 @@ body, h1, h2, h3, button, input, select, textarea, .sectionTitle, .cardText {
 }
 /* quien pida menos transparencia en el sistema ve paneles sólidos */
 @media (prefers-reduced-transparency: reduce) {
-  .skinHeader, header.MuiAppBar-root, .mainDrawer, .MuiDrawer-paper, .MuiMenu-paper, .MuiPopover-paper,
+  .skinHeader, header.MuiAppBar-root .MuiButton-root, header.MuiAppBar-root .MuiIconButton-root,
+  .mainDrawer, .MuiDrawer-paper, .MuiMenu-paper, .MuiPopover-paper,
   .dialog, .actionSheet, .toast, .videoOsdBottom .osdControls,
   .emby-button.raised, .button-submit, .detailButton, .emby-scrollbuttons-button,
   .videoOsd-appBar .MuiIconButton-root, .videoOsd-appBar > .MuiTypography-root,
