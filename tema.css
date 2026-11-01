@@ -60,7 +60,9 @@ body, h1, h2, h3, button, input, select, textarea, .sectionTitle, .cardText {
 
 /* filo de luz en la navegación y los controles (el contenido queda limpio, sin cristal encima) */
 .skinHeader::before, header.MuiAppBar-root::before, .videoOsdBottom .osdControls::before,
-.detailButton::before, .emby-scrollbuttons-button::before, .emby-button.raised::before, .button-submit::before {
+.detailButton::before, .emby-scrollbuttons-button::before, .emby-button.raised::before, .button-submit::before,
+.videoOsd-appBar .MuiIconButton-root::before, .videoOsd-appBar > .MuiTypography-root::before,
+.cardOverlayFab-primary::before, .cardOverlayButton-br .cardOverlayButton::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -94,6 +96,7 @@ body, h1, h2, h3, button, input, select, textarea, .sectionTitle, .cardText {
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
 }
+.transparentDocument .skinHeader:not(.osdHeader)::before, .transparentDocument header.MuiAppBar-root::before { content: none; }
 /* la barra baja 10 px al flotar: las páginas bajan lo mismo para que no pise los títulos */
 .mainAnimatedPage.libraryPage, .mainAnimatedPage.itemDetailPage { margin-top: 20px; }
 /* pestañas de las bibliotecas (Películas, Sugerencias…): la activa es una píldora de cristal */
@@ -135,6 +138,19 @@ body, h1, h2, h3, button, input, select, textarea, .sectionTitle, .cardText {
 .cardText-secondary { color: var(--lg-texto-2) !important; }
 /* tarjetas sin imagen (Playlists, carpetas): cristal en vez de color plano */
 .cardImageContainer[class*="defaultCardBackground"] { background: var(--lg-cristal), rgba(255, 255, 255, .04) !important; }
+/* al pasar el ratón: velo suave (la portada se sigue viendo) y los botones como burbujas de cristal con icono blanco */
+.cardOverlayContainer { background: rgba(0, 0, 0, .22) !important; }
+.cardOverlayFab-primary, .cardOverlayButton-br .cardOverlayButton {
+  background: var(--lg-cristal), var(--lg-tinte) !important;
+  -webkit-backdrop-filter: var(--lg-desenfoque);
+  backdrop-filter: var(--lg-desenfoque);
+  box-shadow: var(--lg-brillo), 0 6px 20px rgba(0, 0, 0, .35);
+  border-radius: 50% !important;
+  color: #fff !important;
+}
+.cardOverlayButton-br .cardOverlayButton { margin-left: 4px; }
+.cardOverlayFab-primary .cardOverlayButtonIcon, .cardOverlayButton-br .cardOverlayButtonIcon { color: #fff !important; }
+.cardOverlayFab-primary:hover, .cardOverlayButton-br .cardOverlayButton:hover { background: var(--lg-cristal), rgba(255, 255, 255, .2) !important; }
 /* insignias (vistos, número de episodios) como píldoras de cristal */
 .countIndicator, .playedIndicator, .indicator {
   background: rgba(255, 255, 255, .22) !important;
@@ -205,6 +221,30 @@ body, h1, h2, h3, button, input, select, textarea, .sectionTitle, .cardText {
 /* .videoOsdBottom deja ~110 px arriba para su degradado; el cristal va solo en .osdControls (tiempo y botones) */
 .videoOsdBottom { background: transparent !important; }
 .videoOsdBottom .osdControls { margin: 0 16px; padding: 8px 16px 4px !important; border-radius: var(--lg-radio-panel); }
+/* barra superior del reproductor (volver, título, botones): en vez de una franja, burbujas sueltas de cristal.
+   También lleva .skinHeader, así que se anula la cápsula flotante de la barra normal */
+.skinHeader.osdHeader {
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+.skinHeader.osdHeader::before { content: none !important; }
+.videoOsd-appBar { gap: 8px; padding-top: 12px !important; }
+.videoOsd-appBar .MuiIconButton-root, .videoOsd-appBar > .MuiTypography-root {
+  background: var(--lg-cristal), var(--lg-tinte) !important;
+  -webkit-backdrop-filter: var(--lg-desenfoque);
+  backdrop-filter: var(--lg-desenfoque);
+  box-shadow: var(--lg-brillo), var(--lg-sombra);
+}
+.videoOsd-appBar .MuiIconButton-root { width: 44px; height: 44px; border-radius: 50%; }
+.videoOsd-appBar > .MuiTypography-root { position: relative; padding: 9px 16px; border-radius: 999px; font-weight: 600; }
+
 /* deslizadores blancos como en Apple TV, en vez del azul de Jellyfin */
 .mdl-slider-background-flex { background: rgba(255, 255, 255, .22) !important; }
 .mdl-slider-background-upper { background: rgba(255, 255, 255, .4) !important; }
@@ -231,7 +271,9 @@ body, h1, h2, h3, button, input, select, textarea, .sectionTitle, .cardText {
 @media (prefers-reduced-transparency: reduce) {
   .skinHeader, header.MuiAppBar-root, .mainDrawer, .MuiDrawer-paper, .MuiMenu-paper, .MuiPopover-paper,
   .dialog, .actionSheet, .toast, .videoOsdBottom .osdControls,
-  .emby-button.raised, .button-submit, .detailButton, .emby-scrollbuttons-button {
+  .emby-button.raised, .button-submit, .detailButton, .emby-scrollbuttons-button,
+  .videoOsd-appBar .MuiIconButton-root, .videoOsd-appBar > .MuiTypography-root,
+  .cardOverlayFab-primary, .cardOverlayButton-br .cardOverlayButton {
     background: #1c1c20 !important;
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
