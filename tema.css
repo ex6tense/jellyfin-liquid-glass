@@ -239,7 +239,23 @@ header.MuiAppBar-root .MuiButton-root[aria-current="page"] {
 /* ---------- reproductor: controles en una cápsula flotante ---------- */
 /* .videoOsdBottom deja ~110 px arriba para su degradado; el cristal va solo en .osdControls (tiempo y botones) */
 .videoOsdBottom { background: transparent !important; }
-.videoOsdBottom .osdControls { margin: 0 16px; padding: 8px 16px 4px !important; border-radius: var(--lg-radio-panel); }
+.videoOsdBottom .osdControls {
+  margin: 0 16px;
+  padding: 8px 16px 4px !important;
+  border-radius: var(--lg-radio-panel);
+  /* con width: 100% (otros temas lo ponen) más el margen, la cápsula se salía 32 px por la derecha */
+  width: auto !important;
+  box-sizing: border-box;
+}
+/* vista previa al pasar por la barra de tiempo: esquinas redondeadas y marco de cristal */
+.sliderBubble {
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--lg-cristal), var(--lg-tinte-texto) !important;
+  border: 1px solid var(--lg-borde);
+  box-shadow: var(--lg-brillo), 0 12px 32px rgba(0, 0, 0, .5);
+}
+.sliderBubble .chapterThumbContainer, .sliderBubble .chapterThumbWrapper { border-radius: 13px; }
 /* barra superior del reproductor (volver, título, botones): en vez de una franja, burbujas sueltas de cristal.
    También lleva .skinHeader, así que se anula la cápsula flotante de la barra normal */
 .skinHeader.osdHeader {
