@@ -25,7 +25,10 @@ y recarga Jellyfin.
 ## Qué incluye
 
 - Fondo oscuro con resplandores violeta y azul (el cristal necesita algo detrás que difuminar).
-- Barra superior, menú lateral, menús, ventanas, avisos y controles del reproductor de cristal.
+- Barra superior flotante en la que cada enlace (bibliotecas, Favoritos) es una píldora de cristal y cada icono una burbuja redonda.
+- En el reproductor, volver, el título y los botones son burbujas sueltas; los controles de abajo van en una cápsula.
+- Al pasar el ratón por una tarjeta, reproducir y visto/favorito/más son burbujas de cristal con icono blanco.
+- Menú lateral, menús, ventanas y avisos de cristal.
 - Tarjetas redondeadas con sombra y reflejo, que crecen al enfocarlas; anillo blanco al navegar con mando o teclado.
 - Barra de progreso blanca, botones y campos de cristal, fuente Inter.
 - Móvil: cápsulas más pegadas al borde.
