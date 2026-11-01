@@ -7,12 +7,17 @@
 :root {
   --lg-radio: 16px;
   --lg-radio-panel: 24px;
-  --lg-cristal: linear-gradient(135deg, rgba(255, 255, 255, .16), rgba(255, 255, 255, .04));
-  --lg-tinte: rgba(22, 22, 26, .38);
+  /* Liquid Glass es más claro que el cristal esmerilado: poco desenfoque, mucha saturación y un filo de luz marcado */
+  --lg-cristal: linear-gradient(135deg, rgba(255, 255, 255, .12), rgba(255, 255, 255, .02));
+  --lg-tinte: rgba(20, 20, 24, .32);         /* navegación y controles */
+  --lg-tinte-texto: rgba(20, 20, 24, .62);   /* paneles con texto: menús, ventanas, avisos (contraste ≥ 4.5:1) */
   --lg-borde: rgba(255, 255, 255, .18);
-  --lg-brillo: inset 0 1px 0 rgba(255, 255, 255, .35), inset 0 -1px 0 rgba(255, 255, 255, .06);
+  --lg-brillo: inset 0 1px 0 rgba(255, 255, 255, .3), inset 0 -1px 0 rgba(255, 255, 255, .05);
   --lg-sombra: 0 12px 40px rgba(0, 0, 0, .45);
-  --lg-desenfoque: blur(28px) saturate(180%);
+  --lg-desenfoque: blur(16px) saturate(190%) brightness(1.06);
+  /* filo de luz: brillante arriba a la izquierda, casi nada en medio y un rebote abajo a la derecha */
+  --lg-filo: linear-gradient(135deg, rgba(255, 255, 255, .6), rgba(255, 255, 255, .1) 35%, rgba(255, 255, 255, .02) 60%, rgba(255, 255, 255, .28));
+  --lg-muelle: cubic-bezier(.34, 1.56, .64, 1);
   --lg-texto-2: rgba(255, 255, 255, .55);
 }
 
@@ -47,6 +52,29 @@ body, h1, h2, h3, button, input, select, textarea, .sectionTitle, .cardText {
   border: 1px solid var(--lg-borde) !important;
   box-shadow: var(--lg-brillo), var(--lg-sombra) !important;
 }
+/* donde hay texto que leer el cristal se oscurece más, para que se lea sobre cualquier fondo */
+.mainDrawer, .MuiDrawer-paper, .MuiMenu-paper, .MuiPopover-paper, .dialog, .actionSheet, .toast,
+#loginPage .manualLoginForm, #loginPage .visualLoginForm {
+  background: var(--lg-cristal), var(--lg-tinte-texto) !important;
+}
+
+/* filo de luz en la navegación y los controles (el contenido queda limpio, sin cristal encima) */
+.skinHeader::before, header.MuiAppBar-root::before, .videoOsdBottom .osdControls::before,
+.detailButton::before, .emby-scrollbuttons-button::before, .emby-button.raised::before, .button-submit::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: var(--lg-filo);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+.skinHeader, header.MuiAppBar-root, .videoOsdBottom .osdControls,
+.detailButton, .emby-scrollbuttons-button, .emby-button.raised, .button-submit { border-color: transparent !important; }
+.videoOsdBottom .osdControls { position: relative; }
 
 /* ---------- barra superior: cápsula flotante ---------- */
 .skinHeader, header.MuiAppBar-root {
@@ -55,6 +83,8 @@ body, h1, h2, h3, button, input, select, textarea, .sectionTitle, .cardText {
   right: 16px !important;
   width: auto !important;
   border-radius: 22px;
+  /* el cristal de la barra es claro: con una portada muy blanca debajo, la sombra mantiene el texto legible */
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .45);
 }
 /* en el reproductor la barra se pliega: sin cristal ni borde, o queda una línea suelta sobre el vídeo */
 .transparentDocument .skinHeader, .transparentDocument header.MuiAppBar-root {
@@ -88,15 +118,14 @@ body, h1, h2, h3, button, input, select, textarea, .sectionTitle, .cardText {
 .cardBox { transition: transform .3s cubic-bezier(.2, .8, .2, 1); }
 .cardScalable, .cardImageContainer, .cardContent { border-radius: var(--lg-radio) !important; }
 .cardScalable { box-shadow: 0 10px 30px rgba(0, 0, 0, .5); transition: box-shadow .3s; }
-/* reflejo de luz en el borde superior; encima de la imagen pero sin bloquear los clics */
+/* solo un filo finísimo: el contenido (las portadas) va limpio, el cristal es para navegación y controles */
 .cardScalable::after {
   content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
   pointer-events: none;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .14), inset 0 1px 0 rgba(255, 255, 255, .4);
-  background: linear-gradient(160deg, rgba(255, 255, 255, .18) 0%, rgba(255, 255, 255, 0) 32%);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .1), inset 0 1px 0 rgba(255, 255, 255, .22);
 }
 .card:hover .cardBox, .card:focus .cardBox { transform: scale(1.05); }
 .card:hover .cardScalable, .card:focus .cardScalable { box-shadow: 0 22px 50px rgba(0, 0, 0, .65); }
@@ -131,6 +160,20 @@ body, h1, h2, h3, button, input, select, textarea, .sectionTitle, .cardText {
 .button-submit { background: var(--lg-cristal), rgba(255, 255, 255, .22) !important; }
 .emby-button.raised:hover, .detailButton:hover, .emby-scrollbuttons-button:hover {
   background: var(--lg-cristal), rgba(255, 255, 255, .16) !important;
+}
+/* al pulsar, el cristal se hunde un poco y vuelve con rebote; hundirse es más rápido que volver */
+.emby-button, .detailButton, .emby-scrollbuttons-button, .MuiIconButton-root {
+  transition: transform .35s var(--lg-muelle), background-color .2s;
+}
+.emby-button:active, .detailButton:active, .emby-scrollbuttons-button:active, .MuiIconButton-root:active {
+  transform: scale(.94);
+  transition-duration: .12s;
+}
+/* foco visible al navegar con teclado o mando, también en los botones */
+.emby-button:focus-visible, .detailButton:focus-visible, .emby-scrollbuttons-button:focus-visible,
+.MuiButtonBase-root:focus-visible {
+  outline: 2px solid #fff !important;
+  outline-offset: 2px;
 }
 
 /* ---------- campos de texto y desplegables ---------- */
@@ -180,8 +223,9 @@ body, h1, h2, h3, button, input, select, textarea, .sectionTitle, .cardText {
 
 /* ---------- accesibilidad ---------- */
 @media (prefers-reduced-motion: reduce) {
-  .cardBox, .cardScalable { transition: none; }
-  .card:hover .cardBox, .card:focus .cardBox { transform: none; }
+  .cardBox, .cardScalable, .emby-button, .detailButton, .emby-scrollbuttons-button, .MuiIconButton-root { transition: none; }
+  .card:hover .cardBox, .card:focus .cardBox,
+  .emby-button:active, .detailButton:active, .emby-scrollbuttons-button:active, .MuiIconButton-root:active { transform: none; }
 }
 /* quien pida menos transparencia en el sistema ve paneles sólidos */
 @media (prefers-reduced-transparency: reduce) {
