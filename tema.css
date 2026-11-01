@@ -233,12 +233,13 @@ header.MuiAppBar-root .MuiButton-root[aria-current="page"] {
    (letras negras con fondo transparente) se lean sobre el fondo oscuro */
 .detailLogo {
   background-position: center bottom !important;
-  transform: translateY(44px);  /* ocupa el hueco que deja el título en texto escondido */
   filter: drop-shadow(0 0 1px rgba(255, 255, 255, .7)) drop-shadow(0 0 14px rgba(255, 255, 255, .35)) drop-shadow(0 6px 20px rgba(0, 0, 0, .6));
 }
 /* con logo, el título en texto sobra: en películas y series es el primer nombre; en episodios solo se quita el de la serie */
 .itemDetailPage:has(.detailLogo:not(.hide)) .nameContainer > .itemName:first-child,
 .itemDetailPage:has(.detailLogo:not(.hide)) .nameContainer > .parentName { display: none; }
+/* solo donde se escondió el título (películas y series) el logo baja a ocupar su hueco; en episodios pisaría su título */
+.itemDetailPage:has(.nameContainer > .itemName:first-child) .detailLogo { transform: translateY(44px); }
 
 /* ---------- menús, ventanas y avisos ---------- */
 .dialog, .actionSheet { border-radius: var(--lg-radio-panel) !important; }
