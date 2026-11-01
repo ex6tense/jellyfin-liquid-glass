@@ -222,11 +222,15 @@ header.MuiAppBar-root .MuiButton-root[aria-current="page"] {
 /* el fondo grande se funde con el resto en vez de cortar en seco */
 .itemBackdrop { -webkit-mask-image: linear-gradient(#000 55%, transparent); mask-image: linear-gradient(#000 55%, transparent); }
 .detailPagePrimaryContainer, .detailRibbon, .detailPageWrapperContainer { background: transparent !important; }
-/* la imagen de fondo de la película se ve difuminada detrás de la ficha, como en Apple TV */
+/* imagen de fondo de la película o serie (ajuste "Fondos" del usuario): va en una capa con z-index -1 que el
+   navegador pinta por debajo del body, así que con imagen el body y .skinBody se vuelven transparentes
+   (el negro queda en <html>, que va debajo de la imagen) */
+body:has(.backgroundContainer.withBackdrop), body:has(.backgroundContainer.withBackdrop) .skinBody { background: transparent !important; }
+/* sobre una imagen el texto pasa por zonas claras: la sombra lo mantiene legible */
+.itemDetailPage .detailPageWrapperContainer { text-shadow: 0 1px 3px rgba(0, 0, 0, .85); }
+/* clara arriba para que se vea detrás del logo, oscura abajo donde va el texto */
 .backgroundContainer.withBackdrop {
-  background: rgba(5, 5, 7, .62) !important;
-  -webkit-backdrop-filter: blur(40px) saturate(160%);
-  backdrop-filter: blur(40px) saturate(160%);
+  background: linear-gradient(180deg, rgba(5, 5, 7, .3) 0%, rgba(5, 5, 7, .6) 42%, rgba(5, 5, 7, .88) 72%, rgba(5, 5, 7, .95) 100%) !important;
 }
 .detailImageContainer .cardScalable { box-shadow: 0 20px 50px rgba(0, 0, 0, .6); }
 /* el logo hace de título, como en Apple TV: pegado a los datos y con un halo de luz para que los logos oscuros
@@ -238,8 +242,9 @@ header.MuiAppBar-root .MuiButton-root[aria-current="page"] {
 /* con logo, el título en texto sobra: en películas y series es el primer nombre; en episodios solo se quita el de la serie */
 .itemDetailPage:has(.detailLogo:not(.hide)) .nameContainer > .itemName:first-child,
 .itemDetailPage:has(.detailLogo:not(.hide)) .nameContainer > .parentName { display: none; }
-/* solo donde se escondió el título (películas y series) el logo baja a ocupar su hueco; en episodios pisaría su título */
-.itemDetailPage:has(.nameContainer > .itemName:first-child) .detailLogo { transform: translateY(44px); }
+/* solo donde se escondió el título (películas y series) el logo baja a ocupar su hueco; en episodios pisaría su título.
+   translate y no transform: la animación de aparición de Jellyfin (fadein) anula transform */
+.itemDetailPage:has(.nameContainer > .itemName:first-child) .detailLogo { translate: 0 44px; }
 
 /* ---------- menús, ventanas y avisos ---------- */
 .dialog, .actionSheet { border-radius: var(--lg-radio-panel) !important; }
